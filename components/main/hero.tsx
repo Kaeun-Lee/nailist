@@ -3,6 +3,7 @@ import { MeshGradient } from "@paper-design/shaders-react";
 import { useEffect, useState } from "react";
 
 interface HeroSectionProps {
+  children?: React.ReactNode
   title?: string
   highlightText?: string
   description?: string
@@ -22,6 +23,7 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({
+  children,
   title = "Intelligent AI Agents for",
   highlightText = "Smart Brands",
   description = "Transform your brand and evolve it through AI-driven brand guidelines and always up-to-date core components.",
@@ -82,22 +84,26 @@ export function HeroSection({
       </div>
 
       <div className={`relative z-10 ${maxWidth} mx-auto px-6 w-full`}>
-        <div className="text-center">
-          <h1
-            className={`font-bold text-foreground text-balance text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-none mb-6 ${titleClassName}`}
-          >
-            {title} <span className="text-primary">{highlightText}</span>
-          </h1>
-          <p className={`text-lg sm:text-xl text-white text-pretty max-w-2xl mx-auto leading-relaxed mb-10 px-4 ${descriptionClassName}`}>
-            {description}
-          </p>
-          <button
-            onClick={handleButtonClick}
-            className={`px-4 py-2.5 sm:px-6 sm:py-3.5 rounded-full border-4 border-neutral-700 bg-neutral-800 text-sm sm:text-base text-white hover:bg-neutral-900 transition-colors ${buttonClassName}`}
-          >
-            {buttonText}
-          </button>
-        </div>
+        {children ? (
+          children
+        ) : (
+          <div className="text-center">
+            <h1
+              className={`font-bold text-foreground text-balance text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-none mb-6 ${titleClassName}`}
+            >
+              {title} <span className="text-primary">{highlightText}</span>
+            </h1>
+            <p className={`text-lg sm:text-xl text-white text-pretty max-w-2xl mx-auto leading-relaxed mb-10 px-4 ${descriptionClassName}`}>
+              {description}
+            </p>
+            <button
+              onClick={handleButtonClick}
+              className={`px-4 py-2.5 sm:px-6 sm:py-3.5 rounded-full border-4 border-neutral-700 bg-neutral-800 text-sm sm:text-base text-white hover:bg-neutral-900 transition-colors ${buttonClassName}`}
+            >
+              {buttonText}
+            </button>
+          </div>
+        )}
       </div>
     </section>
   )
