@@ -3,9 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "../../contexts/AuthContext";
 
 export function Navbar() {
   const pathname = usePathname();
+  const { user, signOut } = useAuth();
 
   if (pathname === "/auth") return null;
 
@@ -23,9 +25,18 @@ export function Navbar() {
       </nav>
 
       <div className="flex items-center">
-        <Link href="/auth" className="px-6 py-2.5 bg-white text-black text-sm font-semibold rounded-full hover:bg-neutral-100 transition-colors shadow-lg shadow-white/20">
-          Get Started
-        </Link>
+        {user ? (
+          <button
+            onClick={() => signOut()}
+            className="min-w-[120px] px-6 py-2.5 bg-white/10 text-white text-sm font-semibold rounded-full hover:bg-white/20 transition-colors border border-white/20 text-center"
+          >
+            Sign Out
+          </button>
+        ) : (
+          <Link href="/auth" className="min-w-[120px] px-6 py-2.5 bg-white text-black text-sm font-semibold rounded-full hover:bg-neutral-100 transition-colors shadow-lg shadow-white/20 text-center">
+            Get Started
+          </Link>
+        )}
       </div>
     </header>
   );

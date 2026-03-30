@@ -24,10 +24,10 @@ interface HeroSectionProps {
 
 export function HeroSection({
   children,
-  title = "Intelligent AI Agents for",
-  highlightText = "Smart Brands",
-  description = "Transform your brand and evolve it through AI-driven brand guidelines and always up-to-date core components.",
-  buttonText = "Join Waitlist",
+  title,
+  highlightText,
+  description,
+  buttonText,
   onButtonClick,
   colors = ["#72b9bb", "#b5d9d9", "#ffd1bd", "#ffebe0", "#8cc5b8", "#dbf4a4"],
   distortion = 0.8,
@@ -56,11 +56,6 @@ export function HeroSection({
     return () => window.removeEventListener("resize", update)
   }, [])
 
-  const handleButtonClick = () => {
-    if (onButtonClick) {
-      onButtonClick()
-    }
-  }
 
   return (
     <section className={`relative w-full min-h-screen overflow-hidden bg-background flex items-center justify-center ${className}`}>
@@ -83,7 +78,7 @@ export function HeroSection({
         )}
       </div>
 
-      <div className={`relative z-10 ${maxWidth} mx-auto px-6 w-full`}>
+      <div className={`relative z-10 w-full ${children ? '' : `${maxWidth} mx-auto px-6`}`}>
         {children ? (
           children
         ) : (
@@ -97,8 +92,8 @@ export function HeroSection({
               {description}
             </p>
             <button
-              onClick={handleButtonClick}
-              className={`px-4 py-2.5 sm:px-6 sm:py-3.5 rounded-full border-4 border-neutral-700 bg-neutral-800 text-sm sm:text-base text-white hover:bg-neutral-900 transition-colors ${buttonClassName}`}
+              onClick={onButtonClick}
+              className={`min-w-[160px] sm:min-w-[200px] px-4 py-2.5 sm:px-6 sm:py-3.5 rounded-full border-4 border-neutral-700 bg-neutral-800 text-base sm:text-lg font-semibold text-white hover:bg-neutral-900 transition-colors ${buttonClassName}`}
             >
               {buttonText}
             </button>

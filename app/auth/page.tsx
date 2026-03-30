@@ -1,7 +1,10 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { HeroSection } from "../../components/main/hero";
+import { useAuth } from "../../contexts/AuthContext";
 
 const BackIcon = () => (
     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -27,35 +30,81 @@ const GoogleIcon = () => (
             d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
             fill="#EA4335"
         />
-        <path d="M1 1h22v22H1z" fill="none" />
     </svg>
 );
 
 export default function AuthPage() {
+    const { user, signInWithGoogle, loading } = useAuth();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!loading && user) {
+            router.replace("/");
+        }
+    }, [user, loading, router]);
+
+    const handleGoogleLogin = async () => {
+        const { error } = await signInWithGoogle();
+        if (error) {
+            console.error("Error signing in with Google:", error.message);
+        }
+    };
+
+    if (loading || user) return null;
+
     return (
         <main className="relative min-h-screen">
-            <Link
-                href="/"
-                className="absolute top-6 left-6 md:top-8 md:left-8 z-50 flex items-center text-white/70 hover:text-white transition-colors font-medium bg-black/20 hover:bg-black/40 px-4 py-2 rounded-full border border-white/10 backdrop-blur-md"
-            >
-                <BackIcon />
-                Home
-            </Link>
             <HeroSection>
-                <div className="max-w-md mx-auto p-11 bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl text-center">
-                    <h1 className="text-4xl font-bold text-white mb-3">
-                        Welcome to <span className="text-primary">Nailist</span>
-                    </h1>
-                    <p className="text-white/80 mb-8 leading-relaxed text-sm md:text-base">
-                        Sign in to create amazing thumbnails
-                    </p>
-                    <button
-                        onClick={() => console.log("Google Login Clicked")}
-                        className="w-full flex items-center justify-center py-2.5 bg-neutral-200 text-black font-semibold rounded-xl hover:bg-neutral-300 transition-colors shadow-lg"
-                    >
-                        <GoogleIcon />
-                        Continue with Google
-                    </button>
+                <div className="flex w-full min-h-screen items-stretch">
+                    {/* Left - 3/5 */}
+                    <div className="hidden md:flex md:w-3/5 relative">
+                        <div className="absolute inset-0 bg-black/50" />
+
+                        <div className="relative z-10 flex flex-col items-center justify-center w-full h-full px-10 lg:px-14 gap-14">
+                            {/* YouTube Video */}
+                            <div className="w-full max-w-xl aspect-video rounded-2xl overflow-hidden shadow-2xl">
+                                <iframe
+                                    src="https://www.youtube.com/embed/QwHDiQpPGXk?autoplay=0&rel=0"
+                                    title="Nailist Demo"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                    className="w-full h-full"
+                                />
+                            </div>
+
+                            {/* NAILIST Display Text */}
+                            <h2 className="text-[4rem] lg:text-[5rem] xl:text-[6rem] font-black text-white leading-none tracking-tighter uppercase">
+                                NAILIST
+                            </h2>
+                        </div>
+                    </div>
+
+                    {/* Right - 2/5 */}
+                    <div className="w-full md:w-2/5 relative flex items-center justify-center p-6">
+                        <Link
+                            href="/"
+                            className="absolute top-5 left-5 z-50 flex items-center text-white/60 hover:text-white transition-colors text-sm bg-black/15 hover:bg-black/30 px-3 py-1.5 rounded-full border border-white/10 backdrop-blur-md"
+                        >
+                            <BackIcon />
+                            Home
+                        </Link>
+                        <div className="w-full max-w-xs lg:max-w-sm py-10 px-8 lg:py-12 lg:px-10 bg-black/30 backdrop-blur-md border border-white/10 rounded-3xl shadow-2xl text-center">
+                            <h1 className="text-3xl lg:text-4xl font-bold text-white mb-3">
+                                Welcome back
+                            </h1>
+                            <p className="text-white/80 mb-8 leading-relaxed text-sm md:text-base">
+                                Sign in to create amazing thumbnails
+                            </p>
+                            <button
+                                onClick={handleGoogleLogin}
+                                disabled={loading}
+                                className="w-full flex items-center justify-center py-2.5 bg-neutral-200 text-black font-semibold rounded-xl hover:bg-neutral-300 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <GoogleIcon />
+                                Continue with Google
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </HeroSection>
         </main>
